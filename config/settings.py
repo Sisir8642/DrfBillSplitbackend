@@ -23,7 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
-
+DEBUG = True
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "https://bro-splitter.onrender.com"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -173,9 +174,16 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    
+    
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_CREDENTIALS = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = "None"
 
 
 AUTHENTICATION_BACKENDS = [
