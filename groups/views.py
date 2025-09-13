@@ -59,7 +59,8 @@ class InvitationSendView(generics.CreateAPIView):
          if(serializer.is_valid()):
              invite= serializer.save()
 
-             link = f"http://localhost:3000/accept-invite/{invite.token}/"
+             frontend_url = getattr(settings, "FRONTEND_URL", "http://localhost:3000")
+             link = f"{frontend_url}/accept-invite/{invite.token}/"
              send_mail(
                  subject="Group-Invitation",
                  message=f"You have been invited to join a group for settlements. Click the link to accept: {link}",

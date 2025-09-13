@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = True
 ALLOWED_HOSTS = ['bro-splitter.onrender.com', 'localhost', '127.0.0.1']
-
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
