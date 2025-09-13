@@ -42,37 +42,43 @@ class ExpenseSerializer(serializers.ModelSerializer):
         split_type = validated_data.get('split_type')
         amount = validated_data.get('amount')
 
+        # Resolve paid_by email to User instance
+        if isinstance(validated_data['paid_by'], str):
+            validated_data['paid_by'] = User.objects.get(email=validated_data['paid_by'])
+
         expense = Expense.objects.create(**validated_data)
 
-        if split_type == 'equal':
-            share = round(amount / len(participants_data), 2)
-            for p in participants_data:
+        for p in participants_data:
+            user_email = p['user']  # frontend sends email
+            user_instance = User.objects.get(email=user_email)
+
+            if split_type == 'equal':
+                share = round(amount / len(participants_data), 2)
                 ExpenseParticipant.objects.create(
                     expense=expense,
-                    user=p['user'],
+                    user=user_instance,
                     share_amount=share,
                     paid_amount=p.get('paid_amount', 0)
                 )
-        elif split_type == 'unequal':
-            for p in participants_data:
+            elif split_type == 'unequal':
                 ExpenseParticipant.objects.create(
                     expense=expense,
-                    user=p['user'],
+                    user=user_instance,
                     share_amount=p['share_amount'],
                     paid_amount=p.get('paid_amount', 0)
                 )
-        elif split_type == 'percentage':
-            for p in participants_data:
+            elif split_type == 'percentage':
                 share_amt = round((p['share_amount'] / 100) * amount, 2)
                 ExpenseParticipant.objects.create(
                     expense=expense,
-                    user=p['user'],
+                    user=user_instance,
                     share_amount=share_amt,
                     paid_amount=p.get('paid_amount', 0)
                 )
+
         return expense
 
-    
+
     def update(self, instance, validated_data):
         participants_data = validated_data.pop('participants', None)
 
