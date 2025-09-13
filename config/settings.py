@@ -98,8 +98,14 @@ DATABASES = {
         'PASSWORD': config('DB_PASSWORD'),
         'HOST': config('DB_HOST'),
         'PORT': config('DB_PORT'),
+        'OPTIONS': {
+            'options': '-c search_path=billsplitter,public'
+        }
     }
 }
+
+
+
 
 
 # Password validation
