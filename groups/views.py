@@ -58,6 +58,9 @@ class InvitationSendView(generics.CreateAPIView):
          serializer= InvitationSerializer(data= request.data, context={'request': request})
          if(serializer.is_valid()):
              invite= serializer.save()
+             
+             print("FRONTEND_URL used:", settings.FRONTEND_URL)
+
 
              frontend_url = getattr(settings, "FRONTEND_URL", "http://localhost:3000")
              link = f"{frontend_url}/accept-invite/{invite.token}/"
